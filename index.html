@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Новогодние поздравления</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  h1 {
+    font-size: 6rem;
+    text-align: center;
+  }
+  p {
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<h1>С Новым Годом!</h1>
+<p>Пусть наступающий год принесет вам радость, успехи и незабываемые моменты!</p>
+<canvas id="fireworks"></canvas>
+<script>
+  var canvas = document.getElementById('fireworks');
+  var ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  function drawFirework(x, y) {
+    var particles = [];
+    var points = 48;
+    var angle = (Math.PI * 2) / points;
+    for (var i = 0; i < points; i++) {
+      var vx = Math.cos(angle * i) * random(2, 8);
+      var vy = Math.sin(angle * i) * random(2, 8);
+      particles.push({
+        x: x,
+        y: y,
+        vx: vx,
+        vy: vy,
+        size: random(3, 6),
+        opacity: 1,
+      });
+    }
+    return particles;
+  }
+  var fireworks = [];
+  function animate() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (fireworks.length < 25 && Math.random() < 0.1) {
+      fireworks.push({
+        x: random(0, canvas.width),
+        y: random(0, canvas.height - 100),
+        particles: drawFirework(random(0, canvas.width), random(0, canvas.height - 100)),
+      });
+    }
+
+    for (var i = fireworks.length - 1; i >= 0; i--) {
+      var firework = fireworks[i];
+      for (var j = firework.particles.length - 1; j >= 0; j--) {
+        var p = firework.particles[j];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = 'rgb(255, 255, 255)';
+        ctx.fill();
+        p.opacity -= random(0.005, 0.03);
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += random(0.1, 0.5);
+
+        if (p.opacity <= 0) {
+          firework.particles.splice(j, 1);
+        }
+      }
+      if (firework.particles.length === 0) {
+        fireworks.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+</body>
+</html>
