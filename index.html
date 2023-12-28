@@ -33,9 +33,25 @@
 </head>
 <body>
 <h1>С Новым Годом!</h1>
-<p>Пусть наступающий год принесет вам радость, успехи и незабываемые моменты!</p>
+<p id="greeting"></p> <!-- Добавлен атрибут id-->
 <canvas id="fireworks"></canvas>
 <script>
+  // Массив с поздравлениями
+  var greetings = [
+    "Пусть наступающий год принесет вам радость, успехи и незабываемые моменты!",
+    "Встречайте Новый год с верой в лучшее и с надеждой на большие свершения!",
+    "Пусть в Новом году вам сопутствует удача, а все дела успешно разрешаются!",
+    "Счастья, здоровья и успехов в наступающем году!",
+    "Пусть Новый год станет для вас годом больших побед и исполнения желаний!",
+  ];
+
+    function getRandomGreeting(greetings) {
+    return greetings[Math.floor(Math.random() * greetings.length)];
+  }
+
+  // Замена текста тега <p> на случайное поздравление из массива
+  document.getElementById('greeting').innerText = getRandomGreeting(greetings);
+
   var canvas = document.getElementById('fireworks');
   var ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
