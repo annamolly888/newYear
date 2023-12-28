@@ -79,6 +79,28 @@
     return particles;
   }
   var fireworks = [];
+    var mouseX = window.innerWidth / 2;
+  var mouseY = window.innerHeight / 2;
+
+  // Обработчик событий для отслеживания движения мыши
+  function handleMouseMove(event) {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+  }
+
+  // Функция для обновления координат фейерверков
+  function updateFireworks() {
+    if (fireworks.length < 25) {
+      fireworks.push({
+        x: mouseX,
+        y: mouseY,
+        particles: drawFirework(mouseX, mouseY),
+      });
+    }
+  }
+
+  window.addEventListener('mousemove', handleMouseMove);
+
   function animate() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
